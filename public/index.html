@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Cloud Computing Ex1</title>
+</head>
+<body>
+    <h1>Cloud Computing Ex1</h1>
+    <form id        =  "uploadFlie"
+          enctype   =  "multipart/form-data"
+          action    =  "upload"
+          method    =  "post"
+            >
+        <input type="file" name="Load file" />
+        <input type="submit" value="Upload file" name="submit">
+    </form>
+    <button id="btnCalc" type="button">Calc</button>
+    <ul id="calc"></ul>
+    <button id="btnAWSStatus" type="button">Show AWS status button</button>
+    <ul id="awsStatus"></ul>
+    <button id="btnClearCache" type="button">Clear cache</button>
+    <div id="clearCache"></div>
+    <button id="btnShowCache" type="button">Show results from cache</button>
+    <ul id="showCache"></ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        $("#btnCalc").click(function(event) {
+            console.log("btn click!!");
+            $.get( "/grades/calc", function( data ) {
+                $( "#calc").empty();
+                for(var i=0; i < data.length; i++) {
+                    $( "#calc").append("<li>" + data[i] + "</li>");
+                }
+            });
+        });
+    </script>
+    <script>
+        $("#btnAWSStatus").click(function(event) {
+            console.log("btnAWSStatus click!!");
+            $.get( "/aws/status", function( data ) {
+                $( "#awsStatus").empty();
+                $( "#awsStatus").text(data);
+            });
+        });
+    </script>
+    <script>
+        $("#btnClearCache").click(function(event) {
+            console.log("btnClearCache click!!");
+            $.get( "/aws/cache/clear", function( data ) {
+                $( "#showCache").empty();
+                $( "#clearCache").empty();
+                $( "#clearCache").text(data);
+            });
+        });
+    </script>
+    <script>
+        $("#btnShowCache").click(function(event) {
+            console.log("btnShowCache click!!");
+            $.get( "/aws/cache/show", function( data ) {
+                $( "#showCache").empty();
+                for(var i=0; i < data.length; i++) {
+                    $( "#showCache").append("<li>" + data[i] + "</li>");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "Ex1",
+  "version": "1.0.0",
+  "description": "First excercis in cloud computing class",
+  "main": "app.js",
+  "scripts": {
+    "test": "Hellow Ex1"
+  },
+  "author": "asher gruber",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1.21",
+    "bluebird": "^2.9.24",
+    "express": "^4.12.3",
+    "multer": "^0.1.8",
+    "redis": "^0.12.1",
+    "underscore": "^1.8.3"
+  }
+}
