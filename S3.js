@@ -68,7 +68,7 @@ module.exports = function () {
         });
     }
 
-    function getEC2InstaneData() {
+    function getEC2InstanceData() {
         return new Promise(function(resolve, reject){
             console.log("\n\nLoading handler\n\n");
             var ec2 = new AWS.EC2();
@@ -93,7 +93,7 @@ module.exports = function () {
         getFile : getFile,
         getFiles : getFiles,
         uploadFile : uploadFile,
-        getEC2InstaneData : getEC2InstaneData
+        getEC2InstanceData : getEC2InstanceData
     };
 
 };
