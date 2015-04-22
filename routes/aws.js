@@ -9,7 +9,7 @@ var cache = require('../cacheLayer')();
 cache.setup();
 
 exports.awsStatus = function (req, res) {
-    s3.getEC2InstaneData()
+    s3.getEC2InstanceData()
         .then(function(data) {
             console.log('Data: ' + data);
             res.send(data);
