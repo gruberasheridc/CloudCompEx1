@@ -84,7 +84,7 @@
     <script>
         $("#btnClearCache").click(function(event) {
             console.log("btnClearCache click!!");
-            $.get( "/aws/cache/clear", function( data ) {
+            $.get( "/grades/cache/clear", function( data ) {
                 $( "#showCache").empty();
                 $( "#clearCache").empty();
                 $( "#clearCache").text(data);

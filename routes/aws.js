@@ -5,9 +5,6 @@
 var s3 = require('../S3')();
 s3.setup();
 
-var cache = require('../cacheLayer')();
-cache.setup();
-
 exports.awsStatus = function (req, res) {
     s3.getEC2InstanceData()
         .then(function(data) {
@@ -47,12 +44,4 @@ function getTagByKey(tags, key) {
     }
 
     return retval;
-};
-
-exports.clearCache = function (req, res) {
-    cache.clearCache()
-        .then(function(data) {
-            console.log('Data: ' + data);
-            res.send(data);
-        });
 };

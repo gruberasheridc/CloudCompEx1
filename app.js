@@ -15,8 +15,8 @@ app.use(express.static('public'));
 
 app.get('/grades/calc', grades.calcGrades);
 app.get('/grades/cache', grades.showCacheGrades);
+app.get('/grades/cache/clear', grades.clearCache);
 app.get('/aws/status', aws.awsStatus);
-app.get('/aws/cache/clear', aws.clearCache);
 
 app.post('/upload', upload.uploadToS3);
 
