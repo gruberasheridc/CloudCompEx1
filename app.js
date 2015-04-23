@@ -4,17 +4,6 @@
 var express = require('express');
 var app = express();
 
-var Promise = require('bluebird');
-
-var cache = require('./cacheLayer')();
-cache.setup();
-
-var FSs3 = require('./fileSystemLayerS3')();
-FSs3.setup();
-
-var s3 = require('./S3')();
-s3.setup();
-
 var upload = require('./routes/upload');
 var grades = require('./routes/grades');
 var aws = require('./routes/aws');
