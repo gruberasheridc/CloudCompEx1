@@ -26,7 +26,7 @@
     <script>
         $("#btnCalc").click(function(event) {
             console.log("btn click!!");
-            $.get( "/grades/calc", function( data ) {
+            $.get( "/grades/calc", function(data) {
                 parseAndAddGrades(data, "#calc");
             });
         });
@@ -34,9 +34,21 @@
     <script>
         $("#btnAWSStatus").click(function(event) {
             console.log("btnAWSStatus click!!");
-            $.get( "/aws/status", function( data ) {
+            $.get( "/aws/status", function(data) {
                 $( "#awsStatus").empty();
-                $( "#awsStatus").text(data);
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var instance = data[i];
+                        $("#awsStatus").append("<li>" + "EC2 " +
+                            "Type: " + instance["type"] + "." +
+                            "Name: " + instance["name"] + "." +
+                            " Availability Zone: " + instance["availabilityZone"] + "." +
+                            " State: " + instance["state"] + "." +
+                        "</li>");
+                    }
+                } else {
+                    $("#awsStatus").text("No instances have been configured!");
+                }
             });
         });
     </script>
