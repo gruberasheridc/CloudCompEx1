@@ -7,6 +7,9 @@ var Promise = require('bluebird');
 var s3 = require('../S3')();
 s3.setup();
 
+var fs = require('../fileSystemLayer')();
+fs.setup();
+
 exports.uploadToS3 = function (req, res) {
     return new Promise(function (resolve, reject) {
         var files = _.toArray(req.files);
@@ -19,6 +22,11 @@ exports.uploadToS3 = function (req, res) {
         Promise.all(uploadedPromise).then(function (uploadedResults) {
             uploadedResults.forEach(function (file) {
                 uploadedETags.push(file.ETag);
+            });
+
+            // Clear the files from the servers' temp location.
+            files.forEach(function(file) {
+                fs.delFile(file.path);
             });
 
             resolve(uploadedETags);

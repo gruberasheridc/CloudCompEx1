@@ -14,9 +14,14 @@ module.exports = function () {
         return fs.readFileAsync(path, encoding);
     }
 
+    function delFile(path) {
+        return fs.unlinkAsync(path, encoding);
+    }
+
     return {
         setup : setup,
-        getFile : getFile
+        getFile : getFile,
+        delFile : delFile
     };
 
 }
