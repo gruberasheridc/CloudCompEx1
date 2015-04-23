@@ -88,12 +88,33 @@ module.exports = function () {
         });
     }
 
+    function getELBInstanceData() {
+        return new Promise(function(resolve, reject){
+            console.log("\n\nLoading handler\n\n");
+            var elb = new AWS.ELB();
+            elb.describeLoadBalancers(function(err, data) {
+                console.log("\nIn describe instances:\n");
+                if (err) {
+                    console.log(err, err.stack); // an error occurred
+                    reject(error);
+                }
+                else {
+                    console.log("\n\n" + data + "\n\n"); // successful response
+                    resolve(data);
+                }
+            });
+
+            console.log('Function Finished!');
+        });
+    }
+
     return {
         setup : setup,
         getFile : getFile,
         getFiles : getFiles,
         uploadFile : uploadFile,
-        getEC2InstanceData : getEC2InstanceData
+        getEC2InstanceData : getEC2InstanceData,
+        getELBInstanceData : getELBInstanceData
     };
 
 };

@@ -65,14 +65,28 @@
             console.log("btnAWSStatus click!!");
             $.get( "/aws/status", function(data) {
                 $( "#awsStatus").empty();
-                if (data.length > 0) {
-                    for (var i = 0; i < data.length; i++) {
-                        var instance = data[i];
-                        $("#awsStatus").append("<li>" + "EC2 " +
-                            "Type: " + instance["type"] + "." +
-                            "Name: " + instance["name"] + "." +
+                if (data) {
+                    var ec2Instances = data["ec2Instances"];
+                    for (var i = 0; i < ec2Instances.length; i++) {
+                        var instance = ec2Instances[i];
+                        $("#awsStatus").append("<li>" + "EC2 - " +
+                            " Name: " + instance["name"] + "." +
+                            " Type: " + instance["type"] + "." +
                             " Availability Zone: " + instance["availabilityZone"] + "." +
                             " State: " + instance["state"] + "." +
+                        "</li>");
+                    }
+
+                    var elbs = data["elbs"];
+                    for (var i = 0; i < elbs.length; i++) {
+                        var loadBalancer = elbs[i];
+                        $("#awsStatus").append("<li>" + "ELB - " +
+                            " Name: " + loadBalancer["name"] + "." +
+                            " DNS Name: " + loadBalancer["dnsName"] + "." +
+                            " Availability Zones: " + loadBalancer["availabilityZones"] + "." +
+                            " Created Time: " + loadBalancer["createdTime"] + "." +
+                            " Scheme: " + loadBalancer["scheme"] + "." +
+                            " Instances: " + loadBalancer["instances"] + "." +
                         "</li>");
                     }
                 } else {
