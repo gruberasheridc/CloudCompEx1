@@ -6,25 +6,33 @@ var Promise = require('bluebird');
 var s3 = require('../S3')();
 s3.setup();
 
+var cache = require('../cacheLayer')();
+cache.setup();
+
 exports.calcGrades = function (req, res) {
     s3.getFiles()
         .then(function(gradeFilesMetadata) {
             return new Promise(function(resolve, reject) {
                 // Find the file names and fetch.
+                var etagToFileName = {};
                 var filesPromise = [];
                 var contents = gradeFilesMetadata.Contents;
                 contents.forEach(function(fileMD) {
                     var fileKey = fileMD['Key'];
                     filesPromise.push(s3.getFile(fileKey));
+                    etagToFileName[fileMD.ETag] = fileKey;
                 });
 
                 var fileGrades = [];
                 Promise.all(filesPromise).then(function(files) {
                     // We have all the files.
                     files.forEach(function(file) {
-                        var gradeAvg = getAvg(file);
-                        var fileGradeDesc = 'For File IDC-2014.txt the average grade is ' + gradeAvg;
-                        fileGrades.push(fileGradeDesc);
+                        var gradeAvg = getAvg(file.Body.toString());
+                        var fileName = etagToFileName[file.ETag];
+                        var fileGrade = '{"fileName":' + '"' + fileName + '"' + ', "avgGrade":' + gradeAvg + '}';
+                        fileGrades.push(fileGrade);
+                        var cacheKey = 'grade' + ':' + fileName;
+                        cache.setObject(cacheKey, fileGrade);
                     });
 
                     resolve(fileGrades);

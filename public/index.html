@@ -29,7 +29,8 @@
             $.get( "/grades/calc", function( data ) {
                 $( "#calc").empty();
                 for(var i=0; i < data.length; i++) {
-                    $( "#calc").append("<li>" + data[i] + "</li>");
+                    var fileGrade = JSON.parse(data[i]);
+                    $( "#calc").append("<li>" + "For File " + fileGrade["fileName"] + " the average grade is " +fileGrade["avgGrade"] + "</li>");
                 }
             });
         });

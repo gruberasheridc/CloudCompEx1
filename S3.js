@@ -20,7 +20,7 @@ module.exports = function () {
                     reject(error);
                 }
                 else {
-                    resolve(data.Body.toString());
+                    resolve(data);
                 }
             });
         });
