@@ -6,23 +6,52 @@
 </head>
 <body>
     <h1>Cloud Computing Ex1</h1>
-    <form id        =  "uploadFlie"
-          enctype   =  "multipart/form-data"
-          action    =  "upload"
-          method    =  "post"
-            >
-        <input type="file" name="Load file" />
-        <input type="submit" value="Upload file" name="submit">
-    </form>
-    <button id="btnCalc" type="button">Calculate</button>
+    <button id="btnCalc" type="button">Calculate Grades</button>
     <ul id="calc"></ul>
-    <button id="btnAWSStatus" type="button">Show AWS status button</button>
-    <ul id="awsStatus"></ul>
-    <button id="btnClearCache" type="button">Clear cache</button>
-    <div id="clearCache"></div>
-    <button id="btnShowCache" type="button">Show results from cache</button>
+    <form id='uploadForm' enctype='multipart/form-data'>
+        <input id='inputFile' type='file' value="Choose File">
+        <input id='inputSubmit' type='button' value='Upload'>
+        <div id="uploadResult"></div>
+    </form>
+    <button id="btnShowCache" type="button">Show Results from Cache</button>
     <ul id="showCache"></ul>
+    <button id="btnClearCache" type="button">Clear Cache</button>
+    <div id="clearCache"></div>
+    <button id="btnAWSStatus" type="button">Show AWS Status</button>
+    <ul id="awsStatus"></ul>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script>
+        $("#inputSubmit").on("click", function() {
+            var fd = new FormData();
+            fd.append("uploadingFile", $("#inputFile").get(0).files[0]);
+            fd.append("date", (new Date()).toString()); // req.body.date
+
+            var xhr = new XMLHttpRequest();
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.addEventListener("error", uploadFailed, false);
+            xhr.addEventListener("abort", uploadCanceled, false);
+
+            xhr.open("POST", "/upload");
+            xhr.send(fd);
+            $("#uploadResult").empty();
+        });
+
+        function uploadComplete(evt) {
+            $("#uploadResult").empty();
+            $("#uploadResult").text("The file was uploaded successfully!!!");
+        }
+
+        function uploadFailed(evt) {
+            $("#uploadResult").empty();
+            $("#uploadResult").text("There was an error attempting to upload the file.");
+            alert();
+        }
+
+        function uploadCanceled(evt) {
+            $("#uploadResult").empty();
+            $("#uploadResult").text("The upload has been canceled by the user or the browser dropped the connection.");
+        }
+    </script>
     <script>
         $("#btnCalc").click(function(event) {
             console.log("btn click!!");
