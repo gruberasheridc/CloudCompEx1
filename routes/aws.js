@@ -23,11 +23,3 @@ exports.clearCache = function (req, res) {
             res.send(data);
         });
 };
-
-exports.showCache = function (req, res) {
-    cache.getValuesByKeyPattern("*")
-        .then(function(data) {
-            console.log('Data: ' + data);
-            res.send(data);
-        });
-};

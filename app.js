@@ -24,16 +24,10 @@ var multer = require('multer');
 app.use(multer({dest:'./uploads/'}));
 app.use(express.static('public'));
 
-app.get('/get/:key', function (req, res) {
-    cache.getObject(req.params.key).then(function(valueFromCache) {
-        res.send('Value: ' + valueFromCache + '!!!');
-    })
-});
-
 app.get('/grades/calc', grades.calcGrades);
+app.get('/grades/cache', grades.showCacheGrades);
 app.get('/aws/status', aws.awsStatus);
 app.get('/aws/cache/clear', aws.clearCache);
-app.get('/aws/cache/show', aws.showCache);
 
 app.post('/upload', upload.uploadToS3);
 

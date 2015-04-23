@@ -24,8 +24,12 @@ module.exports = function () {
         return client.flushallAsync();
     }
 
-    function getValuesByKeyPattern(keyPattern){
+    function getKeysByPattern(keyPattern){
         return client.keysAsync(keyPattern);
+    }
+
+    function getValuesByKeys(getValuesByKeys){
+        return client.mgetAsync(getValuesByKeys);
     }
 
     return {
@@ -33,7 +37,8 @@ module.exports = function () {
         getObject : getObject,
         setObject : setObject,
         clearCache : clearCache,
-        getValuesByKeyPattern : getValuesByKeyPattern
+        getKeysByPattern : getKeysByPattern,
+        getValuesByKeys : getValuesByKeys
     };
 
 };

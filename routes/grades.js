@@ -9,6 +9,8 @@ s3.setup();
 var cache = require('../cacheLayer')();
 cache.setup();
 
+var GRADE_CACHE_PREFIX = 'grade:'
+
 exports.calcGrades = function (req, res) {
     s3.getFiles()
         .then(function(gradeFilesMetadata) {
@@ -31,7 +33,7 @@ exports.calcGrades = function (req, res) {
                         var fileName = etagToFileName[file.ETag];
                         var fileGrade = '{"fileName":' + '"' + fileName + '"' + ', "avgGrade":' + gradeAvg + '}';
                         fileGrades.push(fileGrade);
-                        var cacheKey = 'grade' + ':' + fileName;
+                        var cacheKey = GRADE_CACHE_PREFIX + fileName;
                         cache.setObject(cacheKey, fileGrade);
                     });
 
@@ -67,3 +69,18 @@ function getAvg(gradesFile) {
 
     return sum / numOfItems;
 }
+
+exports.showCacheGrades = function (req, res) {
+    cache.getKeysByPattern(GRADE_CACHE_PREFIX + "*")
+        .then(function(keys) {
+            if (keys.length > 0) {
+                cache.getValuesByKeys(keys).then(function(values) {
+                    res.send(values);
+                })
+            } else {
+                // No keys match the pattern, so not values in cache.
+                var noValue = [];
+                res.send(noValue);
+            }
+        });
+};

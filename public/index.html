@@ -27,11 +27,7 @@
         $("#btnCalc").click(function(event) {
             console.log("btn click!!");
             $.get( "/grades/calc", function( data ) {
-                $( "#calc").empty();
-                for(var i=0; i < data.length; i++) {
-                    var fileGrade = JSON.parse(data[i]);
-                    $( "#calc").append("<li>" + "For File " + fileGrade["fileName"] + " the average grade is " +fileGrade["avgGrade"] + "</li>");
-                }
+                parseAndAddGrades(data, "#calc");
             });
         });
     </script>
@@ -57,13 +53,23 @@
     <script>
         $("#btnShowCache").click(function(event) {
             console.log("btnShowCache click!!");
-            $.get( "/aws/cache/show", function( data ) {
-                $( "#showCache").empty();
-                for(var i=0; i < data.length; i++) {
-                    $( "#showCache").append("<li>" + data[i] + "</li>");
-                }
+            $.get( "/grades/cache", function( data ) {
+                parseAndAddGrades(data, "#showCache");
             });
         });
+    </script>
+    <script type="text/javascript">
+        function parseAndAddGrades(data, element) {
+            $(element).empty();
+            if (data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    var fileGrade = JSON.parse(data[i]);
+                    $(element).append("<li>" + "For File " + fileGrade["fileName"] + " the average grade is " + fileGrade["avgGrade"] + "</li>");
+                }
+            } else {
+                $(element).text("No results from cache!");
+            }
+        }
     </script>
 </body>
 </html>
