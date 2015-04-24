@@ -11,42 +11,35 @@ cache.setup();
 
 var GRADE_CACHE_PREFIX = 'grade:'
 
-exports.calcGrades = function (req, res) {
-    s3.getFiles()
-        .then(function(gradeFilesMetadata) {
-            return new Promise(function(resolve, reject) {
-                // Find the file names and fetch.
-                var etagToFileName = {};
-                var filesPromise = [];
-                var contents = gradeFilesMetadata.Contents;
-                contents.forEach(function(fileMD) {
-                    var fileKey = fileMD['Key'];
-                    filesPromise.push(s3.getFile(fileKey));
-                    etagToFileName[fileMD.ETag] = fileKey;
-                });
-
-                var fileGrades = [];
-                Promise.all(filesPromise).then(function(files) {
-                    // We have all the files.
-                    files.forEach(function(file) {
-                        var gradeAvg = getAvg(file.Body.toString());
-                        var fileName = etagToFileName[file.ETag];
-                        var fileGrade = '{"fileName":' + '"' + fileName + '"' + ', "avgGrade":' + gradeAvg + '}';
-                        fileGrades.push(fileGrade);
-                        var cacheKey = GRADE_CACHE_PREFIX + fileName;
-                        cache.setObject(cacheKey, fileGrade);
-                    });
-
-                    resolve(fileGrades);
-                }).catch(function(error) {
-                    reject(error);
-                });
-            });
-        })
-        .then(function(data) {
-            console.log('Data: ' + data);
-            res.send(data);
+exports.calcGrades = function(req, res) {
+    s3.getFiles().then(function(gradeFilesMetadata) {
+        // Find the file names and fetch.
+        var etagToFileName = {};
+        var filesPromise = [];
+        var contents = gradeFilesMetadata.Contents;
+        contents.forEach(function (fileMD) {
+            var fileKey = fileMD['Key'];
+            filesPromise.push(s3.getFile(fileKey));
+            etagToFileName[fileMD.ETag] = fileKey;
         });
+
+        var fileGrades = [];
+        Promise.all(filesPromise).then(function(files) {
+            // We have all the files. Calculate the grades and generate response.
+            files.forEach(function(file) {
+                var gradeAvg = getAvg(file.Body.toString());
+                var fileName = etagToFileName[file.ETag];
+                var fileGrade = '{"fileName":' + '"' + fileName + '"' + ', "avgGrade":' + gradeAvg + '}';
+                fileGrades.push(fileGrade);
+                var cacheKey = GRADE_CACHE_PREFIX + fileName;
+                cache.setObject(cacheKey, fileGrade);
+            });
+
+            res.send(fileGrades);
+        }).catch(function(error) {
+            res.send("Error while calculating grades. " + error);
+        });
+    });
 };
 
 
