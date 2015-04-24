@@ -4,17 +4,17 @@
 module.exports = function () {
     var Promise = require('bluebird');
     var AWS = require('aws-sdk');
-    var s3;
-    var bucketName = 'cloudcomp.agruber';
+    const bucketName = 'cloudcomp.agruber';
 
     function setup() {
+        // The AWS Credentials are loaded from the credential local file which is defined as best practice.
         AWS.config.region = 'eu-west-1';
-        s3 = new AWS.S3();
     }
 
     function getFile(key) {
         return new Promise(function(resolve, reject){
             var params = {Bucket: bucketName, Key: key, ResponseContentType : 'application/json'};
+            var s3 = new AWS.S3();
             s3.getObject(params, function(error, data) {
                 if (error) {
                     reject(error);
@@ -29,6 +29,7 @@ module.exports = function () {
     function getFiles() {
         return new Promise(function (resolve, reject) {
             var params = {Bucket: bucketName};
+            var s3 = new AWS.S3();
             s3.listObjects(params, function (error, data) {
                 if (error) {
                     reject(error);
@@ -61,6 +62,7 @@ module.exports = function () {
                 ContentLength: contentLength
             };
 
+            var s3 = new AWS.S3();
             s3.putObject(params, function(error, data) {
                 if (error) { reject(error); }
                 else { resolve(data); }
@@ -70,41 +72,29 @@ module.exports = function () {
 
     function getEC2InstanceData() {
         return new Promise(function(resolve, reject){
-            console.log("\n\nLoading handler\n\n");
             var ec2 = new AWS.EC2();
             ec2.describeInstances(function(err, data) {
-                console.log("\nIn describe instances:\n");
                 if (err) {
-                    console.log(err, err.stack); // an error occurred
                     reject(error);
                 }
                 else {
-                    console.log("\n\n" + data + "\n\n"); // successful response
                     resolve(data);
                 }
             });
-
-            console.log('Function Finished!');
         });
     }
 
     function getELBInstanceData() {
         return new Promise(function(resolve, reject){
-            console.log("\n\nLoading handler\n\n");
             var elb = new AWS.ELB();
             elb.describeLoadBalancers(function(err, data) {
-                console.log("\nIn describe instances:\n");
                 if (err) {
-                    console.log(err, err.stack); // an error occurred
                     reject(error);
                 }
                 else {
-                    console.log("\n\n" + data + "\n\n"); // successful response
                     resolve(data);
                 }
             });
-
-            console.log('Function Finished!');
         });
     }
 

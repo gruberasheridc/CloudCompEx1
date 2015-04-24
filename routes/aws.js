@@ -3,7 +3,7 @@
  */
 var Promise = require('bluebird');
 
-var s3 = require('../S3')();
+var s3 = require('../AWSService')();
 s3.setup();
 
 exports.awsStatus = function (req, res) {

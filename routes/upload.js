@@ -4,7 +4,7 @@
 var _ = require('underscore');
 var Promise = require('bluebird');
 
-var s3 = require('../S3')();
+var s3 = require('../AWSService')();
 s3.setup();
 
 var fs = require('../fileSystemLayer')();
