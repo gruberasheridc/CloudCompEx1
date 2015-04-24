@@ -11,30 +11,27 @@ var fs = require('../fileSystemLayer')();
 fs.setup();
 
 exports.uploadToS3 = function (req, res) {
-    return new Promise(function (resolve, reject) {
-        var files = _.toArray(req.files);
-        var uploadedPromise = [];
-        files.forEach(function (file) {
-            uploadedPromise.push(s3.uploadFile(file.originalname, file.path));
+    // Send all file to S3.
+    var files = _.toArray(req.files);
+    var uploadedPromise = [];
+    files.forEach(function (file) {
+        uploadedPromise.push(s3.uploadFile(file.originalname, file.path));
+    });
+
+    var uploadedETags = [];
+    Promise.all(uploadedPromise).then(function (uploadedResults) {
+        // All files were uploaded to S3. We process the results and generate a response.
+        uploadedResults.forEach(function (file) {
+            uploadedETags.push(file.ETag);
         });
 
-        var uploadedETags = [];
-        Promise.all(uploadedPromise).then(function (uploadedResults) {
-            uploadedResults.forEach(function (file) {
-                uploadedETags.push(file.ETag);
-            });
-
-            // Clear the files from the servers' temp location.
-            files.forEach(function(file) {
-                fs.delFile(file.path);
-            });
-
-            resolve(uploadedETags);
-        }).catch(function (error) {
-            reject(error);
+        // Clear the files from the servers' temp location.
+        files.forEach(function(file) {
+            fs.delFile(file.path);
         });
-    }).then(function (data) {
-            console.log('File uploaded successfully!!!');
-            res.send(data);
-        });
+
+        res.send(uploadedETags);
+    }).catch(function (error) {
+        res.send(error);
+    });
 };
