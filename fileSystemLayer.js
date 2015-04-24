@@ -4,7 +4,7 @@
 module.exports = function () {
     var Promise = require('bluebird');
     var fs;
-    var encoding = 'utf8';
+    const encoding = 'utf8';
 
     function setup() {
         fs = Promise.promisifyAll(require('fs'));
