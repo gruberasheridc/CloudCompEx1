@@ -36,8 +36,6 @@ exports.calcGrades = function(req, res) {
             });
 
             res.send(fileGrades);
-        }).catch(function(error) {
-            res.send("Error while calculating grades. " + error);
         });
     });
 };

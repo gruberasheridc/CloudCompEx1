@@ -31,7 +31,5 @@ exports.uploadToS3 = function (req, res) {
         });
 
         res.send(uploadedETags);
-    }).catch(function (error) {
-        res.send(error);
     });
 };

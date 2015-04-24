@@ -25,8 +25,6 @@ exports.awsStatus = function (req, res) {
         awsStatus["elbs"] = elbs;
 
         res.send(awsStatus);
-    }).catch(function(error) {
-        res("Error while getting aws status. " + error);
     });
 };
 
