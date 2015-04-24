@@ -3,7 +3,7 @@
  */
 module.exports = function () {
     var Promise = require('bluebird');
-    const HOST = 'localhost';
+    const HOST = 'localhost'; // localhost on test environment. Change when deployed to EC2.
     const PORT = 6379;
     var client;
 
