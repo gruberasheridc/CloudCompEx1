@@ -49,7 +49,6 @@ exports.calcGrades = function(req, res) {
  * @returns {number} the average grade of all the people in the file.
  */
 function getAvg(gradesFile) {
-    console.log(gradesFile);
     var sum = 0;
     var numOfItems = 0;
     var personGrades = JSON.parse(gradesFile)['Grades'];
