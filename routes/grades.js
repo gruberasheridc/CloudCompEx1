@@ -81,7 +81,6 @@ exports.showCacheGrades = function (req, res) {
 exports.clearCache = function (req, res) {
     cache.clearCache()
         .then(function(data) {
-            console.log('Data: ' + data);
             res.send(data);
         });
 };
