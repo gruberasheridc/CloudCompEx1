@@ -9,7 +9,7 @@ s3.setup();
 var cache = require('../cacheLayer')();
 cache.setup();
 
-var GRADE_CACHE_PREFIX = 'grade:'
+const GRADE_CACHE_PREFIX = 'grade:';
 
 exports.calcGrades = function(req, res) {
     s3.getFiles().then(function(gradeFilesMetadata) {
