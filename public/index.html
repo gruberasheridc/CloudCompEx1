@@ -101,7 +101,11 @@
             $.get( "/grades/cache/clear", function( data ) {
                 $( "#showCache").empty();
                 $( "#clearCache").empty();
-                $( "#clearCache").text(data);
+                if (data != null && data == "OK") {
+                    $("#clearCache").text("The cache was cleared successfully!!!");
+                } else {
+                    $("#clearCache").text("The cache clear operation has failed.");
+                }
             });
         });
     </script>
