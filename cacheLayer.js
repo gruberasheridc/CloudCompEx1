@@ -3,11 +3,13 @@
  */
 module.exports = function () {
     var Promise = require('bluebird');
+    const HOST = 'localhost';
+    const PORT = 6379;
     var client;
 
     function setup() {
         var redis = require("redis");
-        client = redis.createClient(6379, 'localhost', {});
+        client = redis.createClient(PORT, HOST, {});
         Promise.promisifyAll(client);
     }
 
